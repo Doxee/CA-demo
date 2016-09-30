@@ -51,6 +51,14 @@
   - dimension: user_agent
     type: string
     sql: ${TABLE}.user_agent
+  
+  - dimension: browser_type
+    type: string
+    sql_case: 
+      Chrome: ${user_agent} like '%Chrome%'
+      Firefox: ${user_agent} like '%Firefox%'
+      Safari: ${user_agent} like '%Safari%'
+      else: 'Other' 
 
   - measure: count
     type: count
@@ -59,4 +67,5 @@
   - measure: opened_videos_number
     type: count
     drill_fields: count_distinct(${event_id})
+    
 

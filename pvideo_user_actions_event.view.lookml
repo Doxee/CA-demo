@@ -58,18 +58,29 @@
     drill_fields: [id]
     
   - measure: amount_of_pause_clicks
-    type: count
-    drill_fields: count_distinct(${pause_time}) where ${pause_time} is not blank
+    type: count_distinct
+    sql: ${pause_time}
     
   - measure: amount_of_play_clicks
-    type: count
-    drill_fields: count_distinct(${play_time}) where ${play_time} is not empty
+    type: count_distinct
+    sql: ${play_time}
     
   - measure: event_number
-    type: count
-    drill_fields: count_distinct(${document_id})
+    type: count_distinct
+    sql: ${document_id}
   
   - measure: amount_of_call_to_action_clicks
     type: count
     drill_fields: count(${call_to_action_click_id}) where ${call_to_action_click_id} is not null
+    
+  - measure: distinct_doc_id
+    type: count_distinct
+    sql: ${document_id}
+
+    
+    
+    
+    
+    
+    
 
