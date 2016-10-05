@@ -52,6 +52,10 @@
   - dimension: seek_to
     type: string
     sql: ${TABLE}.seek_to
+    
+  - measure: real_progress
+    type: number
+    sql: ${progress}
 
   - measure: count
     type: count
