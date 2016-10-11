@@ -9,9 +9,9 @@
 
   - dimension_group: date
     type: time
-    timeframes: [time, date, week, month]
+    timeframes: [time, date, week, month, day_of_month]
     sql: ${TABLE}.date
-
+    
   - dimension: device_name
     type: string
     sql: ${TABLE}.device_name
@@ -28,9 +28,22 @@
     type: string
     sql: ${TABLE}.event_id
 
-  - dimension: gelocalization
+  - dimension: geolocalization
     type: string
-    sql: ${TABLE}.gelocalization
+    sql: ${TABLE}.geolocalization
+    
+  - dimension: position
+    type: location
+    sql_latitude: ${latitude}
+    sql_longitude: ${longitude}
+  
+  - dimension: latitude
+    type: number
+    sql: cast(substring(split_part(geolocalization, ',', 1), charindex('=',geolocalization)+1) as float)
+    
+  - dimension: longitude
+    type: number
+    sql: cast(substring(split_part(geolocalization, ',', 2), charindex('=',geolocalization)+2) as float)
 
   - dimension: guid
     type: string
@@ -52,7 +65,7 @@
     type: string
     sql: ${TABLE}.user_agent
   
-  - dimension: browser_type
+  - dimension: browser
     type: string
     sql_case: 
       Chrome: ${user_agent} like '%Chrome%'
@@ -64,8 +77,11 @@
     type: count
     drill_fields: [id]
     
+  - measure: Users
+    type: count
+    drill_fields: [id]
+    
   - measure: opened_videos_number
     type: count
     drill_fields: count_distinct(${event_id})
-    
 

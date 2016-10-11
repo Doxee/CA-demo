@@ -41,9 +41,13 @@
     type: string
     sql: ${TABLE}.play_time
 
-  - dimension: progress
-    type: string
-    sql: ${TABLE}.progress
+  - dimension: Percentages
+    type: number
+    value_format: '0%'
+    sql: |
+        CASE WHEN ${TABLE}.progress < 10 THEN 0
+             ELSE ROUND(${TABLE}.progress/100,1)
+        END     
 
   - dimension: scene_change_from_to
     type: string
@@ -53,26 +57,24 @@
     type: string
     sql: ${TABLE}.seek_to
     
-  - measure: real_progress
-    type: number
-    sql: ${progress}
-
-  - measure: count
+  - measure: View_Progress
     type: count
     drill_fields: [id]
     
-  - measure: amount_of_pause_clicks
-    type: count_distinct
-    sql: ${pause_time}
+  - measure: Pause
+    type: count
+    drill_fields: ${pause_time}
     
-  - measure: amount_of_play_clicks
-    type: count_distinct
-    sql: ${play_time}
+  - measure: Play
+    type: count
+    drill_fields: ${play_time}
     
   - measure: event_number
     type: count_distinct
     sql: ${document_id}
   
+  - measure: unique_users  
+    type: count_distinct
   - measure: amount_of_call_to_action_clicks
     type: count
     drill_fields: count(${call_to_action_click_id}) where ${call_to_action_click_id} is not null
