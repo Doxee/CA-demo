@@ -39,11 +39,17 @@
   
   - dimension: latitude
     type: number
-    sql: cast(substring(split_part(geolocalization, ',', 1), charindex('=',geolocalization)+1) as float)
+    sql: |
+      case when ${geolocalization}='Not authorized' then null 
+           else cast(split_part(${geolocalization}, ',', 1) as float)
+      end
     
   - dimension: longitude
     type: number
-    sql: cast(substring(split_part(geolocalization, ',', 2), charindex('=',geolocalization)+2) as float)
+    sql: |
+      case when ${geolocalization}='Not authorized' then null 
+           else cast(split_part(${geolocalization}, ',', 2) as float)
+      end
 
   - dimension: guid
     type: string

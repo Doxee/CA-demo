@@ -64,3 +64,8 @@
     type: count
     drill_fields: [id, work_unit_name]
 
+  - measure: unique_users
+    type: count_distinct
+    sql: ${person_id}
+
+

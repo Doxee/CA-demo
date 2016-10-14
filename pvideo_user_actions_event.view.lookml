@@ -59,34 +59,25 @@
     
   - measure: View_Progress
     type: count
-    drill_fields: [id]
-    
-  - measure: Pause
+    drill_fields: [progress]
+   
+  - measure: Count_Pause
     type: count
+    filter:
+      pause_time: '-Undefined'
     drill_fields: ${pause_time}
     
-  - measure: Play
+  - measure: Count_Play
     type: count
+    filter:
+      play_time: '-Undefined'
     drill_fields: ${play_time}
     
   - measure: event_number
     type: count_distinct
     sql: ${document_id}
   
-  - measure: unique_users  
-    type: count_distinct
   - measure: amount_of_call_to_action_clicks
     type: count
-    drill_fields: count(${call_to_action_click_id}) where ${call_to_action_click_id} is not null
+    drill_fields: count(${call_to_action_click_id}) where ${call_to_action_click_id} is not like 'Undefined'
     
-  - measure: distinct_doc_id
-    type: count_distinct
-    sql: ${document_id}
-
-    
-    
-    
-    
-    
-    
-
