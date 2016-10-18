@@ -1,21 +1,18 @@
-- connection: doxeecloudanalytics01temp
+- connection: doxeecloudanalytics01
 
 - include: "*.view.lookml"       # include all the views
 - include: "*.dashboard.lookml"  # include all the dashboards
 
-# - explore: pvideo_user_actions_event
-
-- explore: pvideo_user_actions_registry
-  joins:
-    - join: pvideo_user_actions_event
-      type: inner
-      relationship: many_to_one
-      sql_on: ${pvideo_user_actions_event.document_id} = ${pvideo_user_actions_registry.document_id}
+- explore: pvideo_user_actions_event
+  joins: 
     - join: digital_archiving_registry
       type: inner
-      relationship: many_to_one
-      sql_on: ${pvideo_user_actions_registry.shipment_id} = ${digital_archiving_registry.shipment_id}
-      
+      relationship: one_to_one
+      sql_on: ${pvideo_user_actions_event.document_id} = ${digital_archiving_registry.document_id}
+      fields: [person_id, hash_zip]
+
+- explore: pvideo_user_actions_registry
+
 #- explore: bom_event
 
 #- explore: bom_registry
@@ -51,5 +48,3 @@
 #- explore: shipment_registry
 
 #- explore: staging_aggregation_event
-
-- explore: user_information

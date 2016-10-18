@@ -26,7 +26,12 @@
   - dimension: event_id
     type: string
     sql: ${TABLE}.event_id
-
+    hidden: true
+    
+  - dimension: hash_zip
+    type: string
+    sql: ${TABLE}.hash_zip
+    
   - dimension: index_number
     type: number
     sql: ${TABLE}.index_number
@@ -51,6 +56,11 @@
   - dimension: shipment_id
     type: string
     sql: ${TABLE}.shipment_id
+    
+  - dimension: document_id
+    type: string
+    sql: ${TABLE}.document_id
+  
 
   - dimension: use_case
     type: string
@@ -63,9 +73,4 @@
   - measure: count
     type: count
     drill_fields: [id, work_unit_name]
-
-  - measure: unique_users
-    type: count_distinct
-    sql: ${person_id}
-
 

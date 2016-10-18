@@ -27,6 +27,7 @@
   - dimension: event_id
     type: string
     sql: ${TABLE}.event_id
+    hidden: true
 
   - dimension: geolocalization
     type: string
@@ -40,14 +41,14 @@
   - dimension: latitude
     type: number
     sql: |
-      case when ${geolocalization}='Not authorized' then null 
+      case when ${geolocalization}='Not Authorized' then null 
            else cast(split_part(${geolocalization}, ',', 1) as float)
       end
     
   - dimension: longitude
     type: number
     sql: |
-      case when ${geolocalization}='Not authorized' then null 
+      case when ${geolocalization}='Not Authorized' then null 
            else cast(split_part(${geolocalization}, ',', 2) as float)
       end
 
@@ -62,7 +63,7 @@
   - dimension: shipment_id
     type: string
     sql: ${TABLE}.shipment_id
-
+    
   - dimension: use_case
     type: string
     sql: ${TABLE}.use_case
