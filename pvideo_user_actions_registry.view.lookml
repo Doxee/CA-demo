@@ -84,9 +84,9 @@
     type: count
     drill_fields: [id]
     
-  - measure: Users
-    type: count
-    drill_fields: [id]
+ # - measure: Users
+ #   type: count
+ #   drill_fields: [id]
     
   - measure: opened_videos_number
     type: count

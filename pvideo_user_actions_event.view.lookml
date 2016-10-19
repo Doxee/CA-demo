@@ -68,7 +68,7 @@
   #          when round(${progress},0) = 100 then 100
   #      END
   #  value_format: '0\%'    
-    
+
   - dimension: person_id
     type: string
     sql: substring(${TABLE}.event_id, 0, strpos(${TABLE}.event_id,','))
@@ -83,17 +83,22 @@
     
 # MEASURES START HERE    
     
-  - measure: total_view_progress
-    type: running_total
-    sql: count(${progress})
+  #- measure: total_view_progress
+  #  type: number
+  #  sql: |
+  #    (
+  #      select count(*)
+  #      from pvideo_user_actions_event
+  #      where progress/100 >= ${progress}
+  #    )
     
   - measure: view_progress
     type: count
     drill_fields: [progress]
   
-  - measure: percent_of_total
-    type: percent_of_total
-    sql: count(distinct ${person_id})
+  #- measure: percent_of_total
+  #  type: percent_of_total
+  #  sql: count(distinct ${person_id})
     
   - measure: count_pause
     type: count
@@ -110,3 +115,11 @@
   - measure: unique_users
     type: count_distinct
     sql: ${person_id}  
+    
+  - measure: total_users
+    type: number
+    sql: |
+        (
+          select count(distinct person_id)
+          from digital_archiving_registry
+        )
