@@ -48,24 +48,26 @@
     
   - dimension: progress
     type: number
-    sql: ${TABLE}.progress
-
-  - dimension: percentage
-    type: number
-    value_format: '0\%'
-    sql: |
-        CASE WHEN ${progress} < 10 and ${progress} >= 0 then 0
-            WHEN ${progress} < 20 and ${progress} > 10 then 10
-            WHEN ${progress} < 30 and ${progress} > 20 then 20
-            WHEN ${progress} < 40 and ${progress} > 30 then 30
-            WHEN ${progress} < 50 and ${progress} > 40 then 40
-            WHEN ${progress} < 60 and ${progress} > 50 then 50
-            WHEN ${progress} < 70 and ${progress} > 60 then 60
-            WHEN ${progress} < 80 and ${progress} > 70 then 70
-            WHEN ${progress} < 90 and ${progress} > 80 then 80
-            when ${progress} < 100 and ${progress} > 90 then 90
-            else 100
-        END
+    sql: round(${TABLE}.progress/100,1)
+    value_format: '0%'
+    
+  #- dimension: percentage
+  #  type: number
+  #  sql: |
+  #      CASE
+  #          WHEN round(${progress},0) between 0 and 5 then 0
+  #          WHEN round(${progress},0) between 5 and 15 then 10
+  #          WHEN round(${progress},0) between 16 and 25 then 20
+  #          WHEN round(${progress},0) between 26 and 35 then 30
+  #          WHEN round(${progress},0) between 36 and 45 then 40
+  #          WHEN round(${progress},0) between 46 and 55 then 50
+  #          WHEN round(${progress},0) between 56 and 65 then 60
+  #          WHEN round(${progress},0) between 66 and 75 then 70
+  #          WHEN round(${progress},0) between 76 and 85 then 80
+  #          when round(${progress},0) between 86 and 99 then 90
+  #          when round(${progress},0) = 100 then 100
+  #      END
+  #  value_format: '0\%'    
     
   - dimension: person_id
     type: string
@@ -81,9 +83,13 @@
     
 # MEASURES START HERE    
     
-  - measure: view_progress
+  - measure: total_view_progress
     type: running_total
-    sql: count(*)
+    sql: count(${progress})
+    
+  - measure: view_progress
+    type: count
+    drill_fields: [progress]
   
   - measure: percent_of_total
     type: percent_of_total

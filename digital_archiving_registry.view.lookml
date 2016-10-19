@@ -60,7 +60,6 @@
   - dimension: document_id
     type: string
     sql: ${TABLE}.document_id
-  
 
   - dimension: use_case
     type: string
@@ -73,4 +72,3 @@
   - measure: count
     type: count
     drill_fields: [id, work_unit_name]
-

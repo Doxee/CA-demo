@@ -48,3 +48,5 @@
 #- explore: shipment_registry
 
 #- explore: staging_aggregation_event
+
+- explore: users_behaviour
