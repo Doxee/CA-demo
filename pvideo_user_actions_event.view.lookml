@@ -71,7 +71,7 @@
 
   - dimension: person_id
     type: string
-    sql: ${TABLE}.person_id
+    sql: ${digital_archiving_registry.person_id}
 
   - dimension: scene_change_from_to
     type: string
@@ -80,7 +80,7 @@
   - dimension: seek_to
     type: string
     sql: ${TABLE}.seek_to
-  
+    
   - dimension: actions
     type: string
     sql: |
@@ -94,8 +94,8 @@
            WHEN ${seek_to} NOT LIKE 'Undifend' THEN 'Seek To'
            ELSE 'Undefined'
       END
-  
-  # MEASURES START HERE    
+    
+# MEASURES START HERE    
     
   #- measure: total_view_progress
   #  type: number
@@ -126,14 +126,14 @@
       play_time: '-Undefined'
     drill_fields: [play_time]
     
+  - measure: count_actions
+    type: count
+    drill_fields: [document_id] 
+    
   - measure: unique_users
     type: count_distinct
     sql: ${person_id}  
     
-  - measure: count_actions
-    type: count
-    drill_fields: [document_id] 
-  
   - measure: total_users
     type: number
     sql: |
