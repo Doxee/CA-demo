@@ -71,7 +71,7 @@
 
   - dimension: person_id
     type: string
-    sql: substring(${TABLE}.event_id, 0, strpos(${TABLE}.event_id,','))
+    sql: ${TABLE}.person_id
 
   - dimension: scene_change_from_to
     type: string
@@ -80,8 +80,22 @@
   - dimension: seek_to
     type: string
     sql: ${TABLE}.seek_to
-    
-# MEASURES START HERE    
+  
+  - dimension: actions
+    type: string
+    sql: |
+      CASE 
+           WHEN ${close_browser_window_time} IS NOT NULL THEN 'Close Browser Window'
+           WHEN ${call_to_action_click_id} NOT LIKE 'Undefined' THEN ${call_to_action_click_id}
+           WHEN ${play_time} NOT LIKE 'Undefined' THEN 'Video Play'
+           WHEN ${pause_time} NOT LIKE 'Undefined' THEN 'Video Pause'
+           WHEN ${open_popup} NOT LIKE 'Undefined' THEN 'Open Popup'
+           WHEN ${scene_change_from_to} NOT LIKE 'Undefined' THEN 'Scene Change'
+           WHEN ${seek_to} NOT LIKE 'Undifend' THEN 'Seek To'
+           ELSE 'Undefined'
+      END
+  
+  # MEASURES START HERE    
     
   #- measure: total_view_progress
   #  type: number
@@ -116,6 +130,10 @@
     type: count_distinct
     sql: ${person_id}  
     
+  - measure: count_actions
+    type: count
+    drill_fields: [document_id] 
+  
   - measure: total_users
     type: number
     sql: |
