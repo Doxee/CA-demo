@@ -33,7 +33,11 @@
 
   - dimension: recipient_name
     type: string
-    sql: ${TABLE}.recipient_name
+    sql: |
+        CASE
+          WHEN ${TABLE}.recipient_name is null then 'Matteo Magnani'
+          ELSE ${TABLE}.recipient_name
+        END
 
   - dimension: shipment_address
     type: string
