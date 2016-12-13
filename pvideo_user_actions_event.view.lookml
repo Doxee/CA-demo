@@ -37,7 +37,17 @@
   - dimension: date
     type: string
     # timeframes: [time, date, week, month, day_of_month]
-    sql: split_part(${event_id},'/',1)
+    sql: |
+        CASE
+          WHEN split_part(${event_id},'/',1) ~ '[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]:[0-9]{2}:[0-9]{2}' THEN split_part(split_part(${event_id},'/',1),' ',1) || ' 0' || split_part(split_part(${event_id},'/',1),' ',2)
+          WHEN split_part(${event_id},'/',1) ~ '[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]:[0-9]{2}' THEN split_part(split_part(${event_id},'/',1),':',1) || ':0' || split_part(split_part(${event_id},'/',1),' ',2) || ':' || split_part(split_part(${event_id},'/',1),':',3)
+          WHEN split_part(${event_id},'/',1) ~ '[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]' THEN split_part(split_part(${event_id},'/',1),':',1) || ':' || split_part(split_part(${event_id},'/',1),':',2) || ':0' || split_part(split_part(${event_id},'/',1),':',3)
+          WHEN split_part(${event_id},'/',1) ~ '[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]:[0-9]:[0-9]{2}' THEN split_part(split_part(${event_id},'/',1),' ',1) || ' 0' || split_part(split_part(split_part(${event_id},'/',1),' ',2),':',1) || ':0' || split_part(split_part(${event_id},'/',1),':',2) || ':' || split_part(split_part(${event_id},'/',1),':',3)
+          WHEN split_part(${event_id},'/',1) ~ '[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]:[0-9]{2}:[0-9]' THEN split_part(split_part(${event_id},'/',1),' ',1) || ' 0' || split_part(split_part(split_part(${event_id},'/',1),' ',2),':',1) || ':' || split_part(split_part(${event_id},'/',1),':',2) || ':0' || split_part(split_part(${event_id},'/',1),':',3)
+          WHEN split_part(${event_id},'/',1) ~ '[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]:[0-9]' THEN split_part(split_part(${event_id},'/',1),' ',1) || ' ' || split_part(split_part(split_part(${event_id},'/',1),' ',2),':',1) || ':0' || split_part(split_part(${event_id},'/',1),':',2) || ':0' || split_part(split_part(${event_id},'/',1),':',3)
+          WHEN split_part(${event_id},'/',1) ~ '[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]:[0-9]:[0-9]' THEN split_part(split_part(${event_id},'/',1),' ',1)  || ' 0' || split_part(split_part(split_part(${event_id},'/',1),' ',2),':',1) || ':0' || split_part(split_part(${event_id},'/',1),':',2) || ':0' || split_part(split_part(${event_id},'/',1),':',3)
+          ELSE split_part(${event_id},'/',1)
+        END
   
   - dimension: open_popup
     type: string
