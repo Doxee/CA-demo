@@ -48,7 +48,9 @@
     
   - dimension: progress
     type: number
-    sql: round(${TABLE}.progress/100,1)
+    sql: |
+      CASE
+        WHEN ${TABLE}.progress is between 1 and 100 then ${TABLE}.progress
     value_format: '0%'
     
   #- dimension: percentage

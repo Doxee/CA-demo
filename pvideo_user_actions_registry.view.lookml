@@ -31,7 +31,7 @@
 
   - dimension: geolocalization
     type: string
-    sql: ${TABLE}.geolocalization
+    sql: ${TABLE}.gelocalization
     
   - dimension: position
     type: location
@@ -41,16 +41,18 @@
   - dimension: latitude
     type: number
     sql: |
-      case when ${geolocalization}='Not Authorized' then null 
-           else cast(split_part(${geolocalization}, ',', 1) as float)
-      end
-    
+          CASE
+            WHEN ${geolocalization} ~ 'lat:[0-9]{1,2}\.*[0-9]{0,};long:[0-9]{1,2}\.*[0-9]{0,}' THEN cast(replace(split_part(${geolocalization}, ';', 1),'lat:','') as float)
+            WHEN ${geolocalization} ~ 'long:[0-9]{1,2}\.*[0-9]{0,};lat:[0-9]{1,2}\.*[0-9]{0,}' THEN cast(replace(split_part(${geolocalization}, ';', 2),'lat:','') as float)
+          END
+  
   - dimension: longitude
     type: number
     sql: |
-      case when ${geolocalization}='Not Authorized' then null 
-           else cast(split_part(${geolocalization}, ',', 2) as float)
-      end
+          CASE
+            WHEN ${geolocalization} ~ 'lat:[0-9]{1,2}\.*[0-9]{0,};long:[0-9]{1,2}\.*[0-9]{0,}' THEN cast(replace(split_part(${geolocalization}, ';', 2),'long:','') as float)
+            WHEN ${geolocalization} ~ 'long:[0-9]{1,2}\.*[0-9]{0,};lat:[0-9]{1,2}\.*[0-9]{0,}' THEN cast(replace(split_part(${geolocalization}, ';', 1),'long:','') as float)
+          END
 
   - dimension: guid
     type: string
