@@ -18,6 +18,18 @@
       fields: [person_id, recipient_name]
 
 - explore: pvideo_user_actions_registry
+  joins:
+    - join: digital_archiving_registry
+      type: inner
+      relationship: one_to_one
+      sql_on: ${pvideo_user_actions_registry.document_id} = ${digital_archiving_registry.document_id}
+      fields: [person_id, hash_zip]
+    - join: person_registry  
+      type: inner
+      required_joins: [digital_archiving_registry]
+      relationship: one_to_one
+      sql_on: ${digital_archiving_registry.person_id} = ${person_registry.person_id}
+      fields: [person_id, recipient_name]
 
 #- explore: bom_event
 

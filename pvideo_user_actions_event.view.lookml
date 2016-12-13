@@ -33,7 +33,12 @@
     type: string
     sql: ${TABLE}.event_id
     hidden: true
-
+    
+  - dimension: date
+    type: string
+    # timeframes: [time, date, week, month, day_of_month]
+    sql: split_part(${event_id},'/',1)
+  
   - dimension: open_popup
     type: string
     sql: ${TABLE}.open_popup
@@ -77,7 +82,10 @@
 
   - dimension: scene_change_from_to
     type: string
-    sql: ${TABLE}.scene_change_from_to
+    sql: |
+      CASE
+        WHEN ${TABLE}.scene_change_from_to ~ 'from:.* to:.*' THEN ${TABLE}.scene_change_from_to
+      END
 
   - dimension: seek_to
     type: string
