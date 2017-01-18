@@ -93,4 +93,8 @@
   - measure: opened_videos_number
     type: count
     drill_fields: count_distinct(${event_id})
+    
+  - measure: doc_as_measure
+    type: string
+    sql : ${document_id}
 
